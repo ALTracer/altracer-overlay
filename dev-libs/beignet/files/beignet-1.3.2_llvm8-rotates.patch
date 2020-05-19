@@ -1,0 +1,56 @@
+Block rotate to fshl optimization, as we don't implement fshl.
+Set reg for physical registers to avoid out-of-range index crash.
+
+
+Signed-off-by: Rebecca N. Palmer <rebecca_pal...@zoho.com>
+---
+(where patches 1 and 2 are the LLVM 8/9 ones from
+https://svnweb.freebsd.org/ports/head/lang/beignet/files/ ;
+see also https://salsa.debian.org/opencl-team/beignet )
+
+The tests succeed with this - I'm still not sure if I like it
+(further testing welcome), but given that upstream is abandoned,
+it's probably all we're going to get.
+
+For rotate, I tried to add fshl/fshr to llvm_gen_backend.cpp (mapped
+to rsl/rsr, though I never got far enough to find out whether
+that's actually correct), but there are enough other places that
+don't handle rsl/rsr that the obvious ways didn't work, so I decided
+to block the optimization instead.
+
+For subgroup, testing with LLVM 7 found that the underlying
+"physical register passed to a place it maybe shouldn't be" issue
+is not a new problem, so I kept the previously posted fix for the
+crash and didn't investigate further.
+
+--- a/backend/src/libocl/tmpl/ocl_integer.tmpl.cl
++++ b/backend/src/libocl/tmpl/ocl_integer.tmpl.cl
+@@ -216,13 +216,14 @@ OVERLOADABLE ulong mad_sat(ulong a, ulong b, ulong c) {
+   return __gen_ocl_mad_sat(a, b, c);
+ }
+
+-OVERLOADABLE uchar __rotate_left(uchar x, uchar y) { return (x << y) | (x >> (8 - y)); }
++// the 'volatile' is to make the LLVM optimizer leave these alone, as it would convert them to intrinsics (fshl/fshr) that we don't implement
++OVERLOADABLE uchar __rotate_left(uchar x, uchar y) { volatile uchar z; z = (x << y); return z | (x >> (8 - y)); }
+ OVERLOADABLE char __rotate_left(char x, char y) { return __rotate_left((uchar)x, (uchar)y); }
+-OVERLOADABLE ushort __rotate_left(ushort x, ushort y) { return (x << y) | (x >> (16 - y)); }
++OVERLOADABLE ushort __rotate_left(ushort x, ushort y) { volatile ushort z; z = (x << y); return z | (x >> (16 - y)); }
+ OVERLOADABLE short __rotate_left(short x, short y) { return __rotate_left((ushort)x, (ushort)y); }
+-OVERLOADABLE uint __rotate_left(uint x, uint y) { return (x << y) | (x >> (32 - y)); }
++OVERLOADABLE uint __rotate_left(uint x, uint y) { volatile uint z; z = (x << y); return z | (x >> (32 - y)); }
+ OVERLOADABLE int __rotate_left(int x, int y) { return __rotate_left((uint)x, (uint)y); }
+-OVERLOADABLE ulong __rotate_left(ulong x, ulong y) { return (x << y) | (x >> (64 - y)); }
++OVERLOADABLE ulong __rotate_left(ulong x, ulong y) { volatile ulong z; z = (x << y); return z | (x >> (64 - y)); }
+ OVERLOADABLE long __rotate_left(long x, long y) { return __rotate_left((ulong)x, (ulong)y); }
+ #define DEF(type, m) OVERLOADABLE type rotate(type x, type y) { return __rotate_left(x, (type)(y & m)); }
+ DEF(char, 7)
+--- a/backend/src/backend/gen_register.hpp
++++ b/backend/src/backend/gen_register.hpp
+@@ -225,6 +225,7 @@ namespace gbe
+                        uint32_t width,
+                        uint32_t hstride)
+     {
++      this->value.reg = 0;//avoid subgroup crash
+       this->type = type;
+       this->file = file;
+       this->nr = nr;
