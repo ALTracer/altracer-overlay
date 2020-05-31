@@ -47,6 +47,7 @@ src_prepare() {
 	default
 
 	rm usr/share/${PN}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release/nodegit-centos-7.node #QA CentOS missing openssl-1.0
+	rm usr/share/${PN}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release/nodegit-debian-8.node #QA Debian 8 using openssl-1.0
 	sed -i \
 	-e "s:/usr/share/gitkraken/gitkraken:/opt/${PN}/${BIN}:g" \
 	usr/share/applications/${PN}.desktop || die
