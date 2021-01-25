@@ -17,8 +17,7 @@ IUSE=""
 RESTRICT="strip"
 
 DEPEND=""
-RDEPEND="dev-libs/glib:2
-	dev-libs/openssl:0
+RDEPEND="
 	dev-libs/jsoncpp:0"
 
 S=${WORKDIR}/NX/etc/NX/server/packages
