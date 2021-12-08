@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>tolstov_den@mail.ru</email>
+		<name>Denis Tolstov</name>
+	</maintainer>
+	<use>
+		<flag name="sidplay">Use <pkg>media-libs/libsidplay</pkg> for SID playback</flag>
+	</use>
+</pkgmetadata>
