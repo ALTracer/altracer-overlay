@@ -7,5 +7,7 @@
 	</maintainer>
 	<use>
 		<flag name="sidplay">Use <pkg>media-libs/libsidplay</pkg> for SID playback</flag>
+		<flag name="sdl2">Use <pkg>media-libs/libsdl2</pkg> for video output</flag>
+		<flag name="system-libsidplayfp">Use <pkg>media-libs/libsidplayfp</pkg> for SID playback instead of compiling one with <pkg>dev-embedded/xa</pkg></flag>
 	</use>
 </pkgmetadata>
