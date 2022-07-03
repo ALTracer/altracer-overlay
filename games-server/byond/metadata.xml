@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>tolstov_den@mail.ru</email>
+    <description>Primary maintainer</description>
+  </maintainer>
+  <longdescription>
+    BYOND Dream Worlds compiler and server for linux (x86 binary packages)
+    513 is stable branch;
+    514 is currently in beta.
+  </longdescription>
+</pkgmetadata>
