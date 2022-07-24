@@ -24,14 +24,14 @@ SRC_URI="amd64? ( https://developer.arm.com/-/media/Files/downloads/gnu-rm/${MY_
 
 LICENSE="BSD GPL-2 LGPL-2 LGPL-3 MIT NEWLIB ZLIB"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="python"
 RESTRICT="strip"
 QA_PREBUILT="*"
 
 DEPEND=""
 RDEPEND="sys-libs/ncurses-compat
-		python? ( dev-lang/python:2.7 )"
+		python? ( ${PYTHON_DEPS} )"
 
 S="${WORKDIR}/${PN}-${MY_PV}"
 

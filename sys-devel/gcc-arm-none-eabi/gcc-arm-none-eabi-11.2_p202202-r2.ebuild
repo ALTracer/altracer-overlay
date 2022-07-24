@@ -4,7 +4,7 @@
 EAPI=8
 
 PYTHON_COMPAT=( python3_{8..10} )
-inherit python-any-r1
+inherit python-r1
 
 #https://bugs.launchpad.net/gcc-arm-embedded/+bug/1949004
 #major/update
@@ -20,7 +20,7 @@ HOMEPAGE="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm"
 #SRC_URI="amd64? ( ${SRC_SUFFIX}/${MY_PV2}/gcc-arm-none-eabi--x86_64-linux.tar.bz2 )
 #	arm64? ( ${SRC_SUFFIX}/${MY_PV2}/gcc-arm-none-eabi-${MY_PV1}-aarch64-linux.tar.bz2 )"
 SRC_URI="amd64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}/binrel/gcc-arm-${MY_PV}-x86_64-arm-none-eabi.tar.xz )"
-#	arm64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}/binrel/gcc-arm-${MY_PV}-aarch64-aarch64-none-elf.tar.xz )"
+#	arm64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}/binrel/gcc-arm-${MY_PV}-aarch64-arm-none-eabi.tar.xz )"
 
 LICENSE="BSD GPL-2 LGPL-2 LGPL-3 MIT NEWLIB ZLIB"
 SLOT="0"
@@ -33,7 +33,9 @@ DEPEND=""
 RDEPEND="sys-libs/ncurses-compat
 	virtual/libcrypt
 	dev-libs/expat
-		python? ( dev-lang/python )"
+		python? ( ${PYTHON_DEPS} )"
+
+REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 S="${WORKDIR}/gcc-arm-${MY_PV}-x86_64-arm-none-eabi"
 
