@@ -1,42 +1,40 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
-inherit eutils linux-info toolchain-funcs udev systemd
+EAPI=8
+
+inherit linux-info systemd toolchain-funcs udev
 
 MY_PN=${PN/_/-}
 MY_P=${MY_PN}-${PV/_p*}
 #DATA_VER=${PV/*_p}
 DATA_VER="20191128"
 
-DESCRIPTION="A tool for controlling 'flip flop' (multiple devices) USB gear like UMTS sticks"
+DESCRIPTION="Tool for controlling 'flip flop' (multiple devices) USB gear like UMTS sticks"
 HOMEPAGE="https://www.draisberghof.de/usb_modeswitch/ https://www.draisberghof.de/usb_modeswitch/device_reference.txt"
 SRC_URI="https://www.draisberghof.de/${PN}/${MY_P}.tar.bz2
 	https://www.draisberghof.de/${PN}/${MY_PN}-data-${DATA_VER}.tar.bz2"
+S="${WORKDIR}/${MY_P}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm x86"
-IUSE="jimtcl"
+KEYWORDS="amd64 arm ~arm64 x86"
+IUSE=""
 
-COMMON_DEPEND="
+RDEPEND="
 	virtual/udev
 	virtual/libusb:1
 "
-RDEPEND="${COMMON_DEPEND}
-	jimtcl? ( dev-lang/jimtcl )
-	!jimtcl? ( dev-lang/tcl:0 )" # usb_modeswitch script is tcl
-DEPEND="${COMMON_DEPEND}
-	virtual/pkgconfig
-"
-
-S=${WORKDIR}/${MY_P}
+DEPEND="${RDEPEND}"
+BDEPEND="virtual/pkgconfig"
 
 CONFIG_CHECK="~USB_SERIAL"
 
+PATCHES=( "${FILESDIR}/usb_modeswitch.sh-tmpdir.patch" )
+
 src_prepare() {
+	default
 	sed -i -e '/install.*BIN/s:-s::' Makefile || die
-	epatch "${FILESDIR}/usb_modeswitch.sh-tmpdir.patch"
 }
 
 src_compile() {
@@ -46,9 +44,9 @@ src_compile() {
 src_install() {
 	emake \
 		DESTDIR="${D}" \
-		SYSDIR="${D}/$(systemd_get_unitdir)" \
-		UDEVDIR="${D}/$(get_udevdir)" \
-		$(usex jimtcl install-shared install)
+		SYSDIR="${D}/$(systemd_get_systemunitdir)" \
+		UDEVDIR="${D}/${EPREFIX}$(get_udevdir)" \
+		install
 
 	# Even if we set SYSDIR above, the Makefile is causing automagic detection of `systemctl` binary,
 	# which is why we need to force the .service file to be installed:
@@ -56,12 +54,22 @@ src_install() {
 
 	dodoc ChangeLog README
 
-	pushd ../${MY_PN}-data-${DATA_VER} >/dev/null
+	pushd ../${MY_PN}-data-${DATA_VER} &>/dev/null || die
 	emake \
 		DESTDIR="${D}" \
-		RULESDIR="${D}/$(get_udevdir)/rules.d" \
+		RULESDIR="${D}/${EPREFIX}$(get_udevdir)/rules.d" \
 		files-install db-install
 	docinto data
 	dodoc ChangeLog README
-	popd >/dev/null
+	popd &>/dev/null || die
+
+	keepdir /var/lib/${PN}
+}
+
+pkg_postinst() {
+	udev_reload
+}
+
+pkg_postrm() {
+	udev_reload
 }
