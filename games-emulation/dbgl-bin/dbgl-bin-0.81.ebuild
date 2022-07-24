@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2022 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,8 +8,7 @@ inherit java-pkg-2
 DESCRIPTION="DOSBox Game Launcher"
 HOMEPAGE="http://members.quicknet.nl/blankendaalr/dbgl/"
 MY_PN=${PN%-bin}
-SRC_URI="http://www.mkgmap.org.uk/snapshots/${MY_PN}-r${PV}.tar.gz"
-SRC_URI="http://members.quicknet.nl/blankendaalr/${MY_PN}/download/${MY_PN}${PV/./}_generic.tar.gz"
+SRC_URI="https://dbgl.org/download/${MY_PN}${PV/./}_generic.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
