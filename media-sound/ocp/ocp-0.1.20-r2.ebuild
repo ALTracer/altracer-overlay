@@ -3,14 +3,13 @@
 
 EAPI=7
 
-inherit flag-o-matic
 DESCRIPTION="A console module player"
 HOMEPAGE="http://stian.cubic.org/"
 SRC_URI="http://stian.cubic.org/ocp/${P}.tar.bz2 \
-         ftp://ftp.cubic.org/pub/player/gfx/opencp25image1.zip \
-         ftp://ftp.cubic.org/pub/player/gfx/opencp25ani1.zip"
+	ftp://ftp.cubic.org/pub/player/gfx/opencp25image1.zip \
+	ftp://ftp.cubic.org/pub/player/gfx/opencp25ani1.zip"
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/0.1"
 KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~sparc ~x86"
 
 IUSE="debug X sidplay alsa flac sdl"

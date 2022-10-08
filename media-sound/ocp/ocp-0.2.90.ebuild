@@ -10,7 +10,7 @@ SRC_URI="http://stian.cubic.org/ocp/${P}.tar.bz2 \
 	ftp://ftp.cubic.org/pub/player/gfx/opencp25image1.zip \
 	ftp://ftp.cubic.org/pub/player/gfx/opencp25ani1.zip"
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/0.2"
 KEYWORDS="~amd64 ~x86"
 
 IUSE="debug X alsa flac mad sdl sdl2 system-libsidplayfp"
