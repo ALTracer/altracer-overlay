@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 inherit meson python-r1
 
 DESCRIPTION="Send and receive files across the LAN"
@@ -20,7 +20,7 @@ BDEPEND=">=dev-util/meson-0.45.0
 	dev-libs/gobject-introspection"
 RDEPEND="${PYTHON_DEPS}
 	>=dev-python/python3-xapp-1.6.0[${PYTHON_USEDEP}]
-	<=dev-python/grpcio-1.44.0[${PYTHON_USEDEP}]
+	>=dev-python/grpcio-1.16.0[${PYTHON_USEDEP}]
 	dev-python/cryptography[${PYTHON_USEDEP}]
 	dev-python/pynacl[${PYTHON_USEDEP}]
 	dev-python/setproctitle[${PYTHON_USEDEP}]
