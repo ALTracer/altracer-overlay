@@ -24,7 +24,7 @@ RDEPEND="${PYTHON_DEPS}
 	dev-python/cryptography[${PYTHON_USEDEP}]
 	dev-python/pynacl[${PYTHON_USEDEP}]
 	dev-python/setproctitle[${PYTHON_USEDEP}]
-	dev-python/python-zeroconf[${PYTHON_USEDEP}]"
+	dev-python/zeroconf[${PYTHON_USEDEP}]"
 
 src_configure() {
 	local emesonargs=(
