@@ -1,10 +1,7 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-
-PYTHON_COMPAT=( python2_7 )
-inherit python-any-r1
+EAPI=8
 
 #https://bugs.launchpad.net/gcc-arm-embedded/+bug/1949004
 #major/update
@@ -31,14 +28,15 @@ QA_PREBUILT="*"
 
 DEPEND=""
 RDEPEND="sys-libs/ncurses-compat
-		python? ( ${PYTHON_DEPS} )"
+	python? ( dev-lang/python:2.7 )"
 
 S="${WORKDIR}/${PN}-${MY_PV}"
 
 src_install() {
 	dodir /opt/${PN}
-	\cp -r "${S}"/* "${ED}"/opt/${PN}
-	use python || rm "${ED}"/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb-py
+	cp -r "${S}"/* "${ED}"/opt/${PN}
+	# Depends on Python2.7 which is unsupported
+	use python || rm "${ED}"/opt/${PN}/bin/arm-none-eabi-gdb-py
 	fowners -R root:0 /opt/${PN}
 
 	local DEST="${EPREFIX}/opt/${PN}"
