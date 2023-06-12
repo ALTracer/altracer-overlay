@@ -1,4 +1,4 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -30,8 +30,8 @@ SRC_URI="amd64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}
 
 LICENSE="BSD GPL-2 LGPL-2 LGPL-3 MIT NEWLIB ZLIB"
 SLOT="0"
-KEYWORDS="amd64"
-IUSE="python3"
+KEYWORDS="~amd64 ~arm64"
+IUSE="python"
 RESTRICT="strip"
 QA_PREBUILT="*"
 
@@ -39,14 +39,14 @@ DEPEND=""
 RDEPEND="sys-libs/ncurses-compat
 	virtual/libcrypt
 	dev-libs/expat
-		python3? ( =dev-lang/python-3* )"
+	python? ( dev-lang/python:3.8 )"
 
 S="${WORKDIR}/arm-gnu-toolchain-${MY_PV}-x86_64-arm-none-eabi"
 
 src_install() {
 	dodir /opt/${PN}
-	\cp -r "${S}"/* "${ED}"/opt/${PN}
-	use python3 || rm "${ED}"/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb-py
+	cp -r "${S}"/* "${ED}"/opt/${PN}
+	use python || rm "${ED}"/opt/${PN}/bin/arm-none-eabi-gdb
 	fowners -R root:0 /opt/${PN}
 
 	local DEST="${EPREFIX}/opt/${PN}"
@@ -54,8 +54,9 @@ src_install() {
 PATH=${DEST}/bin
 ROOTPATH=${DEST}/bin
 LDPATH=${DEST}/lib
-MANPATH=${DEST}/share/doc/arm-arm-none-eabi/man
+MANPATH=${DEST}/share/doc/arm-none-eabi/man
 EOF
+	# Note that 12.2 has no manpages
 	newenvd "${T}/env" 99gcc-arm-embedded-bin
 
 	#tell revdep-rebuild to ignore binaries meant for the target
