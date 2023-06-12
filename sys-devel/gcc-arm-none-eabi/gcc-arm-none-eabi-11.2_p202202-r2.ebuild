@@ -3,9 +3,6 @@
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
-inherit python-r1
-
 #https://bugs.launchpad.net/gcc-arm-embedded/+bug/1949004
 #major/update
 #MY_PV1="$(ver_cut 1)-$(ver_cut 2)-q$(ver_cut 3)-major"
@@ -19,12 +16,12 @@ HOMEPAGE="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm"
 #SRC_SUFFIX="https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm"
 #SRC_URI="amd64? ( ${SRC_SUFFIX}/${MY_PV2}/gcc-arm-none-eabi--x86_64-linux.tar.bz2 )
 #	arm64? ( ${SRC_SUFFIX}/${MY_PV2}/gcc-arm-none-eabi-${MY_PV1}-aarch64-linux.tar.bz2 )"
-SRC_URI="amd64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}/binrel/gcc-arm-${MY_PV}-x86_64-arm-none-eabi.tar.xz )"
-#	arm64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}/binrel/gcc-arm-${MY_PV}-aarch64-arm-none-eabi.tar.xz )"
+SRC_URI="amd64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}/binrel/gcc-arm-${MY_PV}-x86_64-arm-none-eabi.tar.xz )
+	arm64? ( https://developer.arm.com/-/media/Files/downloads/gnu/${MY_PV}/binrel/gcc-arm-${MY_PV}-aarch64-arm-none-eabi.tar.xz )"
 
 LICENSE="BSD GPL-2 LGPL-2 LGPL-3 MIT NEWLIB ZLIB"
 SLOT="0"
-KEYWORDS="amd64"
+KEYWORDS="~amd64 ~arm64"
 IUSE="python"
 RESTRICT="strip"
 QA_PREBUILT="*"
@@ -33,16 +30,15 @@ DEPEND=""
 RDEPEND="sys-libs/ncurses-compat
 	virtual/libcrypt
 	dev-libs/expat
-		python? ( ${PYTHON_DEPS} )"
-
-REQUIRED_USE="${PYTHON_REQUIRED_USE}"
+	python? ( dev-lang/python:3.6 )"
 
 S="${WORKDIR}/gcc-arm-${MY_PV}-x86_64-arm-none-eabi"
 
 src_install() {
 	dodir /opt/${PN}
-	\cp -r "${S}"/* "${ED}"/opt/${PN}
-	use python || rm "${ED}"/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb-py
+	cp -r "${S}"/* "${ED}"/opt/${PN}
+	# This release has a gdb binary linked with libpython3.6m.so
+	use python || rm "${ED}"/opt/${PN}/bin/arm-none-eabi-gdb
 	fowners -R root:0 /opt/${PN}
 
 	local DEST="${EPREFIX}/opt/${PN}"
