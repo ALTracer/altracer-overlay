@@ -5,7 +5,7 @@ EAPI=8
 
 inherit go-module
 
-COMMIT="16802a0"
+COMMIT="5149b24a"
 
 DESCRIPTION="Simple terminal UI for git commands"
 HOMEPAGE="https://github.com/jesseduffield/lazygit"
