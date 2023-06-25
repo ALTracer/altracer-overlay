@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<upstream>
+	<maintainer>
+		<email>mail@HeikoBehrens.net</email>
+		<name>Heiko Behrens</name>
+	</maintainer>
+	<maintainer>
+		<email>2538614+noahp@users.noreply.github.com</email>
+		<name>Noah Pendleton</name>
+	</maintainer>
+	<remote-id type="github">HBehrens/puncover</remote-id>
+	<remote-id type="pypi">puncover</remote-id>
+	<bugs-to>https://github.com/HBehrens/puncover</bugs-to>
+</upstream>
+</pkgmetadata>
